@@ -16,3 +16,51 @@
 Модифицирован: 2026-10-07 17:25:45.000000000 +0300
 Изменён:       2026-10-07 17:28:48.389729711 +0300
 Создан:        2026-10-07 17:25:45.000000000 +0300
+# file: data/mephi-2026
+# owner: root
+# group: devs
+# flags: -s-
+user::rwx
+group::rwx
+group:curators:r-x
+mask::rwx
+other::---
+default:user::rwx
+default:group::rwx
+default:group:curators:r-x
+default:group:devs:rwx
+default:mask::rwx
+default:other::---
+
+# file: data/mephi-2026
+# owner: root
+# group: devs
+# flags: -s-
+user::rwx
+group::rwx
+group:curators:r-x
+mask::rwx
+other::---
+default:user::rwx
+default:group::rwx
+default:group:curators:r-x
+default:group:devs:rwx
+default:mask::rwx
+default:other::---
+
+# file: data/mephi-2026
+# owner: root
+# group: devs
+# flags: -s-
+user::rwx
+group::rwx
+group:curators:r-x
+mask::rwx
+other::---
+default:user::rwx
+default:group::rwx
+default:group:curators:r-x
+default:group:devs:rwx
+default:mask::rwx
+default:other::---
+
