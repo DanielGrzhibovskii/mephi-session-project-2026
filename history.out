@@ -1,0 +1,66 @@
+    1  ip a
+    2  hostnamectl set-hostname mephi-2026.domain.local
+    3  systemctl restart NetworkManager
+    4  exit
+    5  ls
+    6  history
+    7  ping -c 4 8.8.8.8 > ~/ping.out
+    8  dnf -y update
+    9  dnf -y install nginx libcap-ng-utils
+   10  dnf -y install libpcap
+   11  cd /tmp && dnf download tcpdump
+   12  rpm -ivh /tmp/tcpdump*.rpm
+   13  dnf history > ~/dnf.out
+   14  lsblk
+   15  parted -s /dev/sdb mklabel gpt mkpart primary ext4 0% 100%
+   16  mkfs.ext4 -L MEPHI_WEB /dev/sdb1
+   17  mkdir /mephi-web
+   18  echo 'LABEL=MEPHI_WEB  /mephi-web  ext4  defaults  0 0' >> /etc/fstab
+   19  systemctl daemon-reload
+   20  mount /mephi-web
+   21  df -h /mephi-web
+   22  systemctl enable --now nginx
+   23  journalctl -u nginx -b > ~/journalctl.out
+   24  groupadd -g 4444 curators
+   25  groupadd devs
+   26  useradd -u 5501 -G devs user1
+   27  useradd -u 5502 -G devs user2
+   28  useradd -u 5503 -G devs user3
+   29  useradd -G curators curator1
+   30  useradd -G curators curator2
+   31  mkdir -p /data/mephi-2026
+   32  chown root:devs /data/mephi-2026
+   33  chmod 2770 /data/mephi-2026
+   34  setfacl -m g:curators:rx /data/mephi-2026
+   35  setfacl -d -m g:curators:r-X /data/mephi-2026
+   36  setfacl -d -m g:devs:rwX /data/mephi-2026
+   37  stat /data/mephi-2026 > ~/stat.out
+   38  ls -l /usr/sbin/tcpdump
+   39  chmod u-s /usr/sbin/tcpdump
+   40  setcap cap_net_raw,cap_net_admin+ep /usr/sbin/tcpdump
+   41  getcap /usr/sbin/tcpdump > ~/getcap.out
+   42  sudo -u user1 tcpdump -c 3
+   43  getenforce
+   44  sed -i 's/^SELINUX=.*/SELINUX=enforcing/' /etc/selinux/config
+   45  setenforce 1
+   46  getenforce > ~/getenforce.out
+   47  dnf -y install policycoreutils-python-utils
+   48  semanage fcontext -a -t httpd_sys_content_t "/mephi-web(/.*)?"
+   49  restorecon -Rv /mephi-web
+   50  ls -dZ /mephi-web
+   51  sed -i 's#root         /usr/share/nginx/html;#root         /mephi-web;#' /etc/nginx/nginx.conf
+   52  nginx -t && systemctl restart nginx
+   53  stat /mephi-web >> ~/stat.out
+   54  echo '-:curators:LOCAL' >> /etc/security/access.conf
+   55  grep pam_access /etc/pam.d/login || sed -i '/account.*required.*pam_nologin.so/a account    required     pam_access.so' /etc/pam.d/login
+   56  sed -i 's/^PASS_MAX_DAYS.*/PASS_MAX_DAYS   90/' /etc/login.defs
+   57  sed -i 's/^PASS_MIN_LEN.*/PASS_MIN_LEN   12/' /etc/login.defs
+   58  sed -i 's/^# *minlen.*/minlen = 12/' /etc/security/pwquality.conf
+   59  grep -E '^minlen' /etc/security/pwquality.conf
+   60  for u in user1 user2 user3 curator1 curator2; do chage -M 90 $u; done
+   61  echo 'Hello from Student: M265829' > /mephi-web/index.html
+   62  restorecon -v /mephi-web/index.html
+   63  curl http://localhost/ > ~/curl.out
+   64  cat ~/curl.out
+   65  mkdir ~/mephi-session-project-2026 && cd ~/mephi-session-project-2026
+   66  history > ~/history.out
